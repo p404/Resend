@@ -1,0 +1,28 @@
+############################# Filebeat ######################################
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /input.log
+      input_type: log
+      exclude_files: [".gz$"]
+      document_type: {{document_type}}
+      scan_frequency: 1s
+      close_eof: true
+
+output:
+  logstash:
+    hosts: ["{{logstash_host}}"]
+    ssl:
+      certificate_authorities: ["/cert.crt"]
+
+shipper:
+
+logging:
+  to_files: true
+  files:
+    path: /
+    name: filebeat_resend.log
+    rotateeverybytes: 10485760
+    keepfiles: 7
+  level: debug
